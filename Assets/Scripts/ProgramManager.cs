@@ -600,55 +600,6 @@ public class ProgramManager : MonoBehaviour
         return curveIntersections;
     }
 
-    //Used to subdivde specific curves for calculating curve intersections.
-    private void SubdivideSpecificBezierCurve(BezierCurve curve, ref BezierCurve curveOutRight, ref BezierCurve curveOutLeft)
-    {
-        //Declare variables and objects needed.
-        List<Vector3> intermediateControlPolygonPoints = new List<Vector3>();
-        List<Vector3> leftCurve = new List<Vector3>();
-        List<Vector3> rightCurve = new List<Vector3>();
-        int N = curve.GetNumControlPoints() - 1;
-
-        //Add the first at last points of the original control polygon to each appropriate curve.
-        leftCurve.Add(curve.GetControlPoints().First());
-        rightCurve.Add(curve.GetControlPoints().Last());
-
-        //Call the DeCasteljau algorithm, each time effectively reduceing the number of edges in the original control polygon by one each iteration.
-        for (int level = 1; level <= N; level++)
-        {
-            //Calculate the intermediate control points for each level, essentially stoping the DeCasteljau algorithm before it is complete.
-            intermediateControlPolygonPoints = curve.CalculateIntermediateControlPolygon(0.5f, level);
-
-            //If level == N then we only have one point, the curve point at t.
-            if (level != N)
-            {
-                //Add the first point of each intermediate control polygon to the end of the left curve.
-                leftCurve.Add(intermediateControlPolygonPoints.First());
-                //Add the last point of each intermediate control polygon to the begining of the right curve.
-                rightCurve.Insert(0, intermediateControlPolygonPoints.Last());
-            }
-            else
-            {
-                //Add the curve point at t to the end of the left curve.
-                leftCurve.Add(intermediateControlPolygonPoints.First());
-                //Add the curve point at t to the begining of the right curve.
-                rightCurve.Insert(0, intermediateControlPolygonPoints.First());
-            }
-        }
-
-        //Assgin the new right curve to the output reference parameter.
-        curveOutRight = new BezierCurve();
-        curveOutRight.SetResolution(curve.GetResulution());
-        for (int j = 0; j < rightCurve.Count; j++)
-            curveOutRight.AddPoint(rightCurve[j]);
-
-        //Assign the new left curve to the output reference parameter.
-        curveOutLeft = new BezierCurve();
-        curveOutLeft.SetResolution(curve.GetResulution());
-        for (int j = 0; j < leftCurve.Count; j++)
-            curveOutLeft.AddPoint(leftCurve[j]);
-    }
-
     //Determines if the bounding boxes for two curves have any overlap.
     private bool DetermineCurveIntersection(BezierCurve curveOne, BezierCurve curveTwo)
     {
@@ -699,6 +650,55 @@ public class ProgramManager : MonoBehaviour
 
         //If we get this far some portion of the bounding boxes overlap.
         return true;
+    }
+
+    //Used to subdivde specific curves for calculating curve intersections.
+    private void SubdivideSpecificBezierCurve(BezierCurve curve, ref BezierCurve curveOutRight, ref BezierCurve curveOutLeft)
+    {
+        //Declare variables and objects needed.
+        List<Vector3> intermediateControlPolygonPoints = new List<Vector3>();
+        List<Vector3> leftCurve = new List<Vector3>();
+        List<Vector3> rightCurve = new List<Vector3>();
+        int N = curve.GetNumControlPoints() - 1;
+
+        //Add the first at last points of the original control polygon to each appropriate curve.
+        leftCurve.Add(curve.GetControlPoints().First());
+        rightCurve.Add(curve.GetControlPoints().Last());
+
+        //Call the DeCasteljau algorithm, each time effectively reduceing the number of edges in the original control polygon by one each iteration.
+        for (int level = 1; level <= N; level++)
+        {
+            //Calculate the intermediate control points for each level, essentially stoping the DeCasteljau algorithm before it is complete.
+            intermediateControlPolygonPoints = curve.CalculateIntermediateControlPolygon(0.5f, level);
+
+            //If level == N then we only have one point, the curve point at t.
+            if (level != N)
+            {
+                //Add the first point of each intermediate control polygon to the end of the left curve.
+                leftCurve.Add(intermediateControlPolygonPoints.First());
+                //Add the last point of each intermediate control polygon to the begining of the right curve.
+                rightCurve.Insert(0, intermediateControlPolygonPoints.Last());
+            }
+            else
+            {
+                //Add the curve point at t to the end of the left curve.
+                leftCurve.Add(intermediateControlPolygonPoints.First());
+                //Add the curve point at t to the begining of the right curve.
+                rightCurve.Insert(0, intermediateControlPolygonPoints.First());
+            }
+        }
+
+        //Assgin the new right curve to the output reference parameter.
+        curveOutRight = new BezierCurve();
+        curveOutRight.SetResolution(curve.GetResulution());
+        for (int j = 0; j < rightCurve.Count; j++)
+            curveOutRight.AddPoint(rightCurve[j]);
+
+        //Assign the new left curve to the output reference parameter.
+        curveOutLeft = new BezierCurve();
+        curveOutLeft.SetResolution(curve.GetResulution());
+        for (int j = 0; j < leftCurve.Count; j++)
+            curveOutLeft.AddPoint(leftCurve[j]);
     }
 
     //Select the next curve in the scene when the next button is clicked.
