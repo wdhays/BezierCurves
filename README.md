@@ -19,7 +19,7 @@ This is a UNITY 3D project, I have included a build for Windows 10 in the “Bui
 14.	You can elevate/reduce the curves degree using the “Raise Degree” and “Reduce Degree” buttons, there is also an input field for entering a number for repeated degree elevation/reduction. A new curve with the raised/reduced degree will be added, the original will not be removed.
 15.	You can subdivide the current curve into two separate curves with the same degree as the original by using the t slider to specify the desired location to split the curve then hitting the “Subdivide Curve” button.
 
-## Algoithm Stuff:
+## Algorithm Stuff:
 1.	Most of the Bezier Curve implementation is in Assets/Scripts/BezierCurve.cs, including the DeCastlejau(121-150), Bernstien(202-235), the Intermediate Polygons(153-178), and a single Curve Point at T(181-199), Degree Elevation(261-284), and Degree Reduction(287-336).
 2.	Assets/Scripts/Database.cs just has two functions for saving and loading to a test file.
 3.	All other implementation is in Assets/Scripts/ProgramManager.cs, including all the UI callbacks, mouse functions, and keyboard functions, wrappers for the Assets/Scripts/BezierCurve.cs functions, Intersection functions (466-653, 6 functions), Curve Subdivision (656-702), and all Draw functions (67-194).
