@@ -11,7 +11,7 @@ namespace Curve
         public static void LoadAllData(ref List<BezierCurve> allCurves)
         {
             //Declare variables needed.
-            StreamReader fin = new StreamReader(@"C:\Users\Dan\Desktop\bezierDataBase.txt", Encoding.Default);
+            StreamReader fin = new StreamReader(@".\bezierDataBase.txt", Encoding.Default);
             //Remove all the old curves.
             allCurves.Clear();
 
@@ -49,7 +49,7 @@ namespace Curve
         public static void SaveAllData(List<BezierCurve> allCurves)
         {
             //Declare variables needed.
-            StreamWriter fout = new StreamWriter(@"C:\Users\Dan\Desktop\bezierDataBase.txt", false, Encoding.Default);
+            StreamWriter fout = new StreamWriter(@".\bezierDataBase.txt", false, Encoding.Default);
             //Write the number of curves in the scene to the file.
             fout.WriteLine(allCurves.Count);
             //Loop over each curve.
